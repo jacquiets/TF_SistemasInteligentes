@@ -11,20 +11,14 @@ import seaborn as sns
 from google.colab import drive
 drive.mount('/content/drive')
 
-# Creación de DataFrame
-data = {
-    'DEPARTAMENTO': ['Lima', 'Lima', 'Arequipa', 'Cusco'],
-    'EDAD': [34, 45, 65, 23],
-    'SEXO': ['F', 'M', 'F', 'M'],
-    'COD_PROCEDIMIENTO': [1001, 1002, 1003, 1004],
-    'VALOR_BRUTO': [150.50, 200.75, 100.00, 300.20],
-}
-
-#df = pd.DataFrame(data)
 df = pd.read_csv('/content/drive/My Drive/dataTest.csv')
 
 # Preprocesamiento
-# Convertir variables categóricas a numéricas
-df['SEXO'] = df['SEXO'].map({'FEMENINO': 0, 'MASCULINO': 1})
-df['C10_NOMBRE'] = df['C10_NOMBRE'].astype('category')
-df['COD_DIAG'] = df['C10_NOMBRE'].cat.codes
+label_encoder = LabelEncoder()
+df['SEXO'] = label_encoder.fit_transform(df['SEXO'])
+df['C10_NOMBRE'] = label_encoder.fit_transform(df['C10_NOMBRE'])
+df['DEPARTAMENTO'] = label_encoder.fit_transform(df['DEPARTAMENTO'])
+
+# Escalar los datos
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
