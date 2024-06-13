@@ -16,6 +16,14 @@ def leer_csv_a_dataframe(ruta_archivo, columnas):
         # Leer el archivo CSV con las columnas especificadas
         df = pd.read_csv(ruta_archivo, usecols=columnas)
         print("Archivo CSV leído exitosamente.")
+
+         # Verificar si el DataFrame está vacío
+        if df.empty:
+            print("Advertencia: El DataFrame está vacío.")
+        else:
+            print(f"El DataFrame contiene {df.shape[0]} filas y {df.shape[1]} columnas.")
+
+            
         return df
     except FileNotFoundError:
         print(f"Error: El archivo en la ruta '{ruta_archivo}' no fue encontrado.")
