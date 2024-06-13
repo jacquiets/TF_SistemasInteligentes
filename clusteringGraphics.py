@@ -18,6 +18,16 @@ def leer_csv_a_dataframe(ruta_archivo, columnas):
     DataFrame: Un DataFrame de pandas con los datos del archivo CSV.
     """
     try:
+
+        # Comprobar si las columnas existen en el archivo CSV
+        df_temp = pd.read_csv(ruta_archivo, nrows=0)
+        missing_columns = [col for col in columnas if col not in df_temp.columns]
+        if missing_columns:
+            print(f"Error: Las siguientes columnas no se encontraron en el archivo CSV: {missing_columns}")
+            return None
+        
+        
+
         # Leer el archivo CSV con las columnas especificadas
         df = pd.read_csv(ruta_archivo, usecols=columnas)
         print("Archivo CSV leído exitosamente.")
