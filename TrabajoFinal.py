@@ -1,15 +1,14 @@
-# Identificar patrones segun diagnostico , departamento y edad
-
-# Importar las librerías
 import pandas as pd
+import numpy as np
+from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.cluster import KMeans
-from sklearn.preprocessing import StandardScaler, LabelEncoder
 import matplotlib.pyplot as plt
 import seaborn as sns
-from google.colab import drive
+
+# Identificar patrones segun diagnostico , departamento y edad
 
 def metodo_codo(data):
-  # Determinación del número óptimo de clusters con el método del codo
+    # Determinación del número óptimo de clusters con el método del codo
     sse = []
     k_range = range(1, 11)
     for k in k_range:
@@ -54,46 +53,58 @@ def leer_csv_a_dataframe(ruta_archivo, nombre_archivo, columnas):
     except Exception as e:
         print(f"Error inesperado: {e}")
 
-
-link_drive = 'https://drive.google.com/file/d/1V1fo2b_DVUhfhU5HeTwV_Wg94HGR6hEt/view?usp=sharing'
-nombre_archivo = 'dataSIS.csv'
+link_drive = 'https://drive.google.com/file/d/105IsGOhI1EV0FC1FJ9mSkyy8LMgB7Fck/view?usp=sharing'
+nombre_archivo = 'dataTest.csv'
 columnas = ['C10_NOMBRE', 'DEPARTAMENTO', 'EDAD', 'SEXO']
 
-df = leer_csv_a_dataframe(link_drive,nombre_archivo,columnas)
+df = leer_csv_a_dataframe(link_drive, nombre_archivo, columnas)
 
 #Si el dataframe no es nulo
+# Mostrar las primeras filas del DataFrame
 if df is not None:
-  # Preprocesamiento
-  # Convertir variables categóricas a numéricas
-  label_encoder = LabelEncoder()
-  df['SEXO'] = label_encoder.fit_transform(df['SEXO'])
-  df['C10_NOMBRE'] = label_encoder.fit_transform(df['C10_NOMBRE'])
-  df['DEPARTAMENTO'] = label_encoder.fit_transform(df['DEPARTAMENTO'])
+    print(df.head())
 
+    # Preprocesamiento de datos
+    # Codificación de la variable 'C10_NOMBRE'
+    label_encoder = LabelEncoder()
+    df['C10_NOMBRE'] = label_encoder.fit_transform(df['C10_NOMBRE'])
 
+    # Normalización de los datos
+    scaler = StandardScaler()
+    df_scaled = scaler.fit_transform(df[['EDAD', 'C10_NOMBRE']])
 
-  # Seleccionar características para el clustering
-  X = df[['C10_NOMBRE', 'EDAD','DEPARTAMENTO','SEXO']]
+    # Determinación del número óptimo de clusters con el método del codo
+    metodo_codo(df_scaled)
 
-  metodo_codo(df)
+    # Seleccionar k (por ejemplo, 3)
+    k_optimo = 2
+    kmeans = KMeans(n_clusters=k_optimo, random_state=42)
+    df['Cluster'] = kmeans.fit_predict(df_scaled)
 
-  # Escalar los datos
-  scaler = StandardScaler()
-  X_scaled = scaler.fit_transform(X)
+    # Visualización de los clusters
+    plt.figure(figsize=(10, 6))
+    sns.scatterplot(data=df, x='EDAD', y='C10_NOMBRE', hue='Cluster', palette='viridis')
+    plt.title('Clusters de K-means')
+    plt.show()
 
-  # Aplicar K-means
-  kmeans = KMeans(n_clusters=3, random_state=50)
-  kmeans.fit(X_scaled)
+    # Gráfico de distribución de EDAD por cada cluster
+    plt.figure(figsize=(10, 6))
+    sns.histplot(data=df, x='EDAD', hue='Cluster', multiple='stack', palette='viridis')
+    plt.title('Distribución de EDAD por Cluster')
+    plt.show()
 
-  # Añadir los labels al DataFrame original
-  df['Cluster'] = kmeans.labels_
+    # Gráfico de distribución de C10_NOMBRE por cada cluster
+    plt.figure(figsize=(10, 6))
+    sns.histplot(data=df, x='C10_NOMBRE', hue='Cluster', multiple='stack', palette='viridis')
+    plt.title('Distribución de Diagnóstico de Tumor (C10_NOMBRE) por Cluster')
+    plt.show()
 
-  # Visualización
-  plt.figure(figsize=(10, 6))
-  sns.scatterplot(data=df, x='EDAD', y='DEPARTAMENTO', hue='Cluster', palette='viridis')
-  plt.title('K-means Clustering de Pacientes Oncológicos')
-  plt.xlabel('Edad')
-  plt.ylabel('Diagnostico')
-  plt.show()
+    # Gráfico de barras de DEPARTAMENTO por cada cluster
+    plt.figure(figsize=(10, 6))
+    sns.countplot(data=df, x='DEPARTAMENTO', hue='Cluster', palette='viridis')
+    plt.title('Número de casos por Departamento y Cluster')
+    plt.xticks(rotation=45)
+    plt.show()
 
-  # print(df)
+    # Mostrar los primeros registros del DataFrame con los clusters asignados
+    print(df.head())
