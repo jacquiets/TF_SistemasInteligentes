@@ -23,6 +23,7 @@ def metodo_codo(data):
     plt.ylabel('SSE (Inercia)')
     plt.title('Método del Codo para encontrar el k óptimo')
     plt.show()
+    # Esta función se utiliza para encontrar el número óptimo de clusters en un dataset
 
 def leer_csv_a_dataframe(ruta_archivo, nombre_archivo, columnas):
     """
