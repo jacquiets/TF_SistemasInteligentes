@@ -11,7 +11,7 @@ El proyecto lee un archivo CSV que contiene datos sobre pacientes, incluyendo el
 ## Estructura del Proyecto
 
 - `dataTest.csv`: Archivo CSV de ejemplo con los datos utilizados para el análisis.
-- `analyze_clustering.py`: Script principal para realizar el análisis de clustering y generar gráficos.
+- `TrabajoFinal.py`: Script principal para realizar el análisis de clustering y generar gráficos.
 - `README.md`: Este archivo.
 
 ## Requisitos
