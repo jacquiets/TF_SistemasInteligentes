@@ -23,6 +23,7 @@ def metodo_codo(data):
     plt.ylabel('SSE (Inercia)')
     plt.title('Método del Codo para encontrar el k óptimo')
     plt.show()
+    # Esta función se utiliza para encontrar el número óptimo de clusters en un dataset
 
 def leer_csv_a_dataframe(ruta_archivo, nombre_archivo, columnas):
     """
@@ -72,6 +73,9 @@ if df is not None:
     # Normalización de los datos
     scaler = StandardScaler()
     df_scaled = scaler.fit_transform(df[['EDAD', 'C10_NOMBRE']])
+    
+    # Añadir un print statement para confirmar la normalización de datos
+    print("Datos normalizados:", df_scaled[:5])
 
     # Determinación del número óptimo de clusters con el método del codo
     metodo_codo(df_scaled)
@@ -87,6 +91,7 @@ if df is not None:
     plt.title('Clusters de K-means')
     plt.show()
 
+    # Este gráfico muestra la distribución de la edad por cada cluster
     # Gráfico de distribución de EDAD por cada cluster
     plt.figure(figsize=(10, 6))
     sns.histplot(data=df, x='EDAD', hue='Cluster', multiple='stack', palette='viridis')
