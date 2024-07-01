@@ -73,6 +73,9 @@ if df is not None:
     # Normalización de los datos
     scaler = StandardScaler()
     df_scaled = scaler.fit_transform(df[['EDAD', 'C10_NOMBRE']])
+    
+    # Añadir un print statement para confirmar la normalización de datos
+    print("Datos normalizados:", df_scaled[:5])
 
     # Determinación del número óptimo de clusters con el método del codo
     metodo_codo(df_scaled)
