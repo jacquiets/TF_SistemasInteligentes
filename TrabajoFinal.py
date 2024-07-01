@@ -88,6 +88,7 @@ if df is not None:
     plt.title('Clusters de K-means')
     plt.show()
 
+    # Este gráfico muestra la distribución de la edad por cada cluster
     # Gráfico de distribución de EDAD por cada cluster
     plt.figure(figsize=(10, 6))
     sns.histplot(data=df, x='EDAD', hue='Cluster', multiple='stack', palette='viridis')
